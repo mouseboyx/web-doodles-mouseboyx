@@ -66,7 +66,7 @@ ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
         b[i].ys+=b[i].yg
         
         for (j=0;j<sq.length;j++) {
-            if (sq[j].fill==b[i].fill) {
+            if (sq[j].fill==b[i].fill && (b[i].del==false && sq[j].del==false)) {
                 if (sq[j].x<b[i].x+b[i].s && sq[j].x+sq[j].s>b[i].x && sq[j].y<b[i].x+b[i].s && sq[j].y+sq[j].s>b[i].y) {
                     sq[j].del=true
                     b[i].del=true
