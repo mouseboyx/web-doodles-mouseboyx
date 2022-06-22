@@ -1,0 +1,151 @@
+<html>
+<head>
+<style>
+body, html {
+margin:0;
+padding:0;
+background-color:black;
+}
+</style>
+</head>
+<body>
+<canvas id="myCanvas" width="200" height="100">
+Your browser does not support the canvas element.
+</canvas>
+<script>
+var mx=0,my=0,md=false;
+document.getElementsByTagName('html')[0].addEventListener('mousemove', function (e) {
+mx=e.clientX;
+my=e.clientY;
+});
+document.getElementsByTagName('html')[0].addEventListener('click', function (e) {
+md=true;
+});
+var canvas = document.getElementById("myCanvas");
+canvas.style.width=window.innerWidth+'px';
+canvas.style.height=window.innerHeight+'px';
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+var ctx = canvas.getContext("2d");
+ctx.fillStyle = "#fff";
+//ctx.fillRect(0,0,150,75);
+ww=window.innerWidth;
+wh=window.innerHeight;
+cc=0
+bc=0
+colors=['#f00','#0f0','#00f'];
+colors2={'#f00':'rgba(255,0,0,','#0f0':'rgba(0,255,0,','#00f':'rgba(0,0,255,'}
+sq=[];
+b=[];
+p=[];
+f=0;
+function anim() {
+ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+    
+    
+    if (f%10==0) {
+        u=b.length
+        b[u]={}
+        b[u].x=ww;
+        b[u].y=wh;
+        b[u].ys=(-3*Math.random())-3
+        b[u].xs=(-1*Math.random())-1
+        b[u].yg=0.018;
+        b[u].g=0;
+        b[u].s=10+(Math.random()*10)
+        b[u].fill=colors[bc%colors.length];
+        b[u].del=false
+        bc++
+    }
+    
+    for (i=0;i<b.length;i++) {
+        ctx.fillStyle=b[i].fill
+        ctx.fillRect(b[i].x,b[i].y,b[i].s,b[i].s)
+        b[i].x+=b[i].xs;
+        b[i].y+=b[i].ys;
+        b[i].ys+=b[i].yg
+        
+        for (j=0;j<sq.length;j++) {
+            if (sq[j].fill==b[i].fill) {
+                if (sq[j].x<b[i].x+b[i].s && sq[j].x+sq[j].s>b[i].x && sq[j].y<b[i].x+b[i].s && sq[j].y+sq[j].s>b[i].y) {
+                    sq[j].del=true
+                    b[i].del=true
+                }
+            }
+        }
+    }
+    
+    for (i=0;i<sq.length;i++) {
+        ctx.fillStyle=sq[i].fill
+        ctx.fillRect(sq[i].x,sq[i].y,sq[i].s,sq[i].s);
+        sq[i].x+=sq[i].xs
+        sq[i].y+=sq[i].ys
+    }
+    
+    if (f%120==0) {
+        u=sq.length;
+        sq[u]={}
+        sq[u].s=(Math.random()*25)+25
+        sq[u].x=0;
+        sq[u].y=(wh-sq[u].s)*Math.random()
+        sq[u].xs=(Math.random()*2)+1
+        sq[u].ys=0;
+        sq[u].fill=colors[cc%colors.length]
+        sq[u].del=false
+        cc++
+    }
+    
+    for (i=0;i<p.length;i++) {
+        ctx.fillStyle=p[i].fill+((400-p[i].t)/400)+')'
+        ctx.fillRect(p[i].x,p[i].y,p[i].s,p[i].s);
+        p[i].x+=p[i].xs
+        p[i].y+=p[i].ys
+        p[i].t++
+    }
+   
+    for (i=0;i<sq.length;i++) {
+        d=Math.round((Math.random()*5)+5)
+        if (sq[i].del==true) {
+            for (j=0;j<d;j++) {
+                for (z=0;z<d;z++) {
+                    
+                    s=sq[i].s/d
+                    u=p.length;
+                    p[u]={};
+                    p[u].s=s
+                    p[u].x=(j*s)+sq[i].x
+                    p[u].y=(z*s)+sq[i].y
+                    p[u].fill=(colors2[sq[i].fill]).toString();
+                    console.log((colors2[sq[i].fill]).toString());
+                    p[u].xs=Math.random()-0.5
+                    p[u].ys=Math.random()-0.5
+                    p[u].t=0
+                    
+                }
+            }
+            
+        }
+    
+        if (sq[i].x>ww || sq[i].del==true) {
+            sq.splice(i,1)
+        }
+    }
+    for (i=0;i<b.length;i++) {
+        if (b[i].y>wh || b[i].del==true) {
+            b.splice(i,1)
+        }
+    }
+    for (i=0;i<p.length;i++) {
+        if (p[i].t>400) {
+            p.splice(i,1)
+        }
+    }
+f++
+window.requestAnimationFrame(anim);
+}
+
+window.requestAnimationFrame(anim);
+
+</script>
+</body>
+</html>
