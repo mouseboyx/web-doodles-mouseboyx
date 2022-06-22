@@ -1,0 +1,90 @@
+<html>
+<head>
+<style>
+body, html {
+margin:0;
+padding:0;
+background-color:black;
+}
+</style>
+</head>
+<body>
+<canvas id="myCanvas" width="200" height="100">
+Your browser does not support the canvas element.
+</canvas>
+<script>
+var mx=0,my=0,md=false;
+document.getElementsByTagName('html')[0].addEventListener('mousemove', function (e) {
+mx=e.clientX;
+my=e.clientY;
+});
+document.getElementsByTagName('html')[0].addEventListener('click', function (e) {
+md=true;
+});
+var canvas = document.getElementById("myCanvas");
+canvas.style.width=window.innerWidth+'px';
+canvas.style.height=window.innerHeight+'px';
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+var ctx = canvas.getContext("2d");
+ctx.fillStyle = "#fff";
+//ctx.fillRect(0,0,150,75);
+ww=window.innerWidth;
+wh=window.innerHeight;
+colors=['#f00','#0f0','#00f'];
+f=0
+count=3
+flip=false
+f2=0
+r=50
+function anim() {
+ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+    
+    
+    //count=Math.round(Math.abs((Math.sin((f/10000)*2*Math.PI)*10))+3)
+    for (z=0;z<wh/r;z++) {
+        for (j=0;j<ww/r;j++) {
+            ctx.strokeStyle=colors[(z+j)%colors.length]
+            ctx.beginPath();
+            for (i=0;i<count;i++) {
+                sin=Math.sin(((i+f2)/count)*2*Math.PI)
+                cos=Math.cos(((i+f2)/count)*2*Math.PI)
+                
+                sin2=Math.sin(((i+1+f2)/count)*2*Math.PI)
+                cos2=Math.cos(((i+1+f2)/count)*2*Math.PI)
+                
+                
+                ctx.moveTo((j*r)+0+(sin*r), (z*r)+0+(cos*r));
+                ctx.lineTo((j*r)+0+(sin2*r), (z*r)+0+(cos2*r));
+                
+            }
+            ctx.stroke();
+        }
+    
+    
+    }
+    f++
+    f2+=0.001
+    if (f%1000==0) {
+        if (flip==false) {
+            count=count+1
+            if (count>12) {
+                flip=true
+            }
+        }
+        if (flip==true) {
+            count=count-1
+            if (count<=3) {
+                flip=false
+            }
+        }
+        
+    }
+window.requestAnimationFrame(anim);
+}
+
+window.requestAnimationFrame(anim);
+
+</script>
+</body>
+</html>
