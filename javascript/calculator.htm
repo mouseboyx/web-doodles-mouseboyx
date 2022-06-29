@@ -1,0 +1,132 @@
+<html>
+<head>
+<style>
+    td {
+        /*border:1px solid black;*/
+        text-align:center;
+    }
+    input {
+        font-size:3em;
+        width:3em;
+    
+    }
+    #result {
+        width:initial;
+        font-size:3em;
+        text-align:right;
+    }
+</style>
+</head>
+<body>
+<table>
+<tr><td colspan="4"><input type="text" id="result"></td></tr>
+<tr><td><input type="button" value="7"></td><td><input type="button" value="8"></td><td><input type="button" value="9"></td><td><input type="button" value="/"></td></tr>
+
+<tr><td><input type="button" value="4"></td><td><input type="button" value="5"></td><td><input type="button" value="6"></td><td><input type="button" value="*"></td></tr>
+
+<tr><td><input type="button" value="1"></td><td><input type="button" value="2"></td><td><input type="button" value="3"></td><td><input type="button" value="-"></td></tr>
+
+<tr><td><input type="button" value="0"></td><td><input type="button" value="."></td><td><input type="button" value="="></td><td><input type="button" value="+"></td></tr>
+
+<tr><td><input type="button" value="Clear" id="clear"></td></tr>
+</table>
+<script>
+numerical=['0','1','2','3','4','5','6','7','8','9','.']
+operators=['/','*','-','+']
+clearNextInput=false
+lastResult='no'
+lastOperator=false
+operatorCount=0
+
+
+inputs=document.body.getElementsByTagName('input')
+    for (i=0;i<inputs.length;i++) {
+        value=inputs[i].getAttribute('value')
+        for (j=0;j<numerical.length;j++) {
+            if (value==numerical[j]) {
+                inputs[i].addEventListener('click', function () {
+                    if (clearNextInput==true) {
+                        document.getElementById('result').value=''
+                        clearNextInput=false
+                    }
+                    document.getElementById('result').value+=this.value
+                    
+                });
+                break;
+            }
+        }
+        
+        for (j=0;j<operators.length;j++) {
+            if (value==operators[j]) {
+                inputs[i].addEventListener('click', function () {
+                    if (operatorCount>0) {
+                        if (lastOperator=='+') {
+                            thisResult=lastResult+parseFloat(document.getElementById('result').value)
+                        }
+                        if (lastOperator=='-') {
+                            thisResult=lastResult-parseFloat(document.getElementById('result').value)
+                            
+                        }
+                        if (lastOperator=='/') {
+                            thisResult=lastResult/parseFloat(document.getElementById('result').value)
+                            
+                        }
+                        
+                        if (lastOperator=='*') {
+                            thisResult=lastResult*parseFloat(document.getElementById('result').value)
+                        }
+                        document.getElementById('result').value=thisResult
+                        lastOperator=this.value
+                        clearNextInput=true
+                        lastResult=parseFloat(document.getElementById('result').value)
+                    } else {
+                        lastOperator=this.value
+                        clearNextInput=true
+                        lastResult=parseFloat(document.getElementById('result').value)
+                    }
+                    operatorCount++
+                    //console.log(lastResult)
+                });
+                break;
+            }
+        }
+        
+        if (value=='=') {
+            inputs[i].addEventListener('click',function () {
+               
+                if (lastResult!='no') {
+                    operatorCount=0
+                    if (lastOperator=='+') {
+                        thisResult=lastResult+parseFloat(document.getElementById('result').value)
+                        
+                    }
+                    if (lastOperator=='-') {
+                        thisResult=lastResult-parseFloat(document.getElementById('result').value)
+                        
+                    }
+                    if (lastOperator=='/') {
+                        thisResult=lastResult/parseFloat(document.getElementById('result').value)
+                        
+                    }
+                    
+                    if (lastOperator=='*') {
+                        thisResult=lastResult*parseFloat(document.getElementById('result').value)
+                        
+                    }
+                    lastResult='no'
+                    document.getElementById('result').value=thisResult
+                }
+            });
+        }
+    }
+    
+    document.getElementById('clear').addEventListener('click',function () {
+        clearNextInput=false
+        lastResult='no'
+        lastOperator=false
+        operatorCount=0
+        document.getElementById('result').value=''
+    });
+</script>
+</body>
+</html>
